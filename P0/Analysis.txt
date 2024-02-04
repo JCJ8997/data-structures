@@ -1,0 +1,103 @@
+Task - 0
+
+The first csv reading code has time complexity O(n), where 'n' is the input - the no of lines in texts.csv
+    - The conversion of the csv to lists also has a complexity of O(n)
+The seconds csv reading code has time complexity O(k), where 'k' is the input - the no of lines in calls.csv
+    - The conversion of the csv to lists also has a complexity of O(k)
+
+
+Time complexity for retrieving from list and print statements are O(1) - constant time.
+
+with open('texts.csv', 'r') as f:
+    reader = csv.reader(f) -> O(n)
+    texts = list(reader) -> O(n)
+
+with open('calls.csv', 'r') as f:
+    reader = csv.reader(f)  ->  O(k)
+    calls = list(reader)  -> O(k)
+
+first_text = texts[0] -> O(1)
+last_call = calls[-1] -> O(1)
+
+print(f" First Record of texts, {first_text[0]} texts {first_text[1]} at time {first_text[2]}")  -> O(1)
+print(f" Last record of calls, {last_call[0]} calls {last_call[1]} at time {last_call[2]}, lasting {last_call[3]} seconds") -> O(1)
+
+we can ignore the constant time.
+
+Time complexity = O(n,k) = O(2n) + O(2k) ~ O(n+k)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Task -1 
+
+with open('texts.csv', 'r') as f:
+    reader = csv.reader(f) -> O(n)
+    texts = list(reader) -> O(n)
+
+with open('calls.csv', 'r') as f:
+    reader = csv.reader(f)  ->  O(k)
+    calls = list(reader)  ->  O(k)
+
+
+# combining the text and call records
+total_records = texts + calls  -> 0(n+k)
+# a dictionary to store the numbers and their occurences.
+unique_numbers = {} -> O(1)
+
+for record in total_records : 
+    if record[0] in unique_numbers.keys():
+        unique_numbers[record[0]] +=1 -> O(n+k)
+    else :
+        unique_numbers[record[0]] = 1  ->~ O(n+k) ( Worst case)
+
+    if record[1] in unique_numbers.keys(): 
+        unique_numbers[record[1]] +=1 -> O(n+k)
+    else :
+        unique_numbers[record[1]] = 1  ->~ O(n+k) ( Worst case)
+
+count_unique_numbers = len(unique_numbers.keys()) -> O(m), where m is the number of keys
+print(f"There are {count_unique_numbers} different telephone numbers in the records.") -> O(1)
+
+Total Time complexity   = 2 * O(n) + 2 * O(k) + O(n+k) + O(1) + 2 * O(n+k) + 2 * O(n+k) + O(m) + O(1)
+when m is relatively smaller than n and k we can ignore it.
+we can approximate it the order of O(n+k)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Task - 2
+
+
+with open('calls.csv', 'r') as f:
+    reader = csv.reader(f)  ->  O(k)
+    calls = list(reader)  ->  O(k)
+
+# a dictionary to store the numbers and their call duration for each time the number is seen.
+unique_numbers = {}  -> O(1)
+
+for record in calls :
+    if record[0] in unique_numbers.keys():
+        unique_numbers[record[0]] += int(record[3])  -> O(k)
+    else :
+        unique_numbers[record[0]] = int(record[3])   -> O(k)
+
+    if record[1] in unique_numbers.keys():
+        unique_numbers[record[1]] +=int(record[3])   -> O(k)
+    else :
+        unique_numbers[record[1]] = int(record[3])    -> O(k)
+
+longest_time = 0  -> O(1)
+longest_user = None  -> O(1)
+for unique_record in unique_numbers.keys() :
+    if unique_numbers[unique_record] > longest_time :
+        longest_time = unique_numbers[unique_record]   -> O(m), m is unique no of keys
+        longest_user = unique_record                   -> O(m)
+
+print(f"{longest_user} spent the longest time, {longest_time} seconds, on the phone during September 2016.")  -> O(1)
+
+Total time complexity  = 2 * O(k) + O(1) + 4 * O(k) + 2 * O(1) + 2 *  O(m) = O(k) + O(m)
+When k is significanly larger than m we can ignore the O(m) term
+
+Time Complexity = O(k)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
