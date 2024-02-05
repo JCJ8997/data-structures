@@ -187,9 +187,12 @@ for number in outgoing_calls :
     if number not in incoming_calls and number not in outgoing_texts and number not in incoming_texts :   -> O(m), where m is the nummber of elements in the set outgoing_calls
         possible_telemarketers.add(number)  -> O(p), p is the number of actual telemarketers found
 
-print("These numbers could be telemarketers: ")   -> O(1)
-for sorted_number in sorted(possible_telemarketers):
-    print(sorted_number)  -> O(p)
+possible_telemarketers = sorted(possible_telemarketers) -> O(p*logp)
 
-Total time complexity = 2 * O(n) + 2 * O(k) + 2 * O(1) + 2 * (k) + 2 * O(1) + 2 * O(n) + O(m)+ O(p) O(1) + O(p)
-we can further simplofy as T = O(n) + O(k) + O(m) + O(p) = O(z), where z = n+k+m+p
+print("These numbers could be telemarketers: ") -> O(1)
+for sorted_number in possible_telemarketers:
+    print(sorted_number) -> O(p)
+
+Total time complexity = 2 * O(n) + 2 * O(k) + 2 * O(1) + 2 * (k) + 2 * O(1) + 2 * O(n) + O(m)+ O(p)+ O(p*logp) O(1) + O(p)
+we can further simplofy as T = O(n) + O(k) + O(m) + O(p) + O(p*logp)
+for large data O(p* log p ) will be the significant term.

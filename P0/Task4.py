@@ -43,7 +43,9 @@ possible_telemarketers = set()
 for number in outgoing_calls :
     if number not in incoming_calls and number not in outgoing_texts and number not in incoming_texts :
         possible_telemarketers.add(number)
+        
+possible_telemarketers = sorted(possible_telemarketers)
 
 print("These numbers could be telemarketers: ")
-for sorted_number in sorted(possible_telemarketers):
+for sorted_number in possible_telemarketers:
     print(sorted_number)
