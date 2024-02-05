@@ -101,3 +101,95 @@ When k is significanly larger than m we can ignore the O(m) term
 Time Complexity = O(k)
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Task - 3
+
+with open('calls.csv', 'r') as f:
+    reader = csv.reader(f)   -> O(k)
+    calls = list(reader)     -> O(k)
+
+bangalore_pattern = "(080)"  -> O(1)
+receiving_numbers = []       -> O(1)
+receiving_unique_codes = []  -> O(1)
+for record in calls :
+    if record[0].startswith(bangalore_pattern) : -> O(k*l), where l is length of bangalore_pattern, here l = 4
+        receiving_numbers.append(record[1])      -> O(k*l)   
+for number in receiving_numbers :
+    if number.startswith("("):  -> O(m), where m is number of receiveing_number starting with "("
+        area_code= number[0:number.index(")")+1]   -> O(m)
+        if area_code not in receiving_unique_codes :    -> O(m), worst case
+            receiving_unique_codes.append(area_code)        -> O(m)  
+    else :                  
+        area_code = number[0:4]  -> O(n), where n is number of receiveing_number not starting with "("
+        if area_code not in receiving_unique_codes :    -> O(n), worst case
+            receiving_unique_codes.append(area_code)    -> O(n)
+
+receiving_unique_codes.sort()  -> O((m+n)*log(m+n))
+            
+print("The numbers called by people in Bangalore have codes:")  -> O(1)
+for codes in receiving_unique_codes :     
+  print(codes)      -> O(p), where p is the length of receiving_unique_codes
+
+receiving_bangalore_pattern_nos = []   -> O(1)
+
+# Part B
+for number in receiving_numbers: 
+    if number.startswith(bangalore_pattern) :  -> O(k*l*l), l= 4
+        receiving_bangalore_pattern_nos.append(number) -> O(k*l*l)
+
+percentage_equation = len(receiving_bangalore_pattern_nos) / len(receiving_numbers)  * 100  -> O(1)
+rounded_percentage_equation  = round(percentage_equation,2)-> O(1)
+
+print(f"{rounded_percentage_equation} percent of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.")  -> O(1)
+
+Total Time complexity = 2*O(k) + 3*O(1) + 2*(4k) + 2*O(m) + 2 * O(n) + O((m+n)*log(m+n)) + O(1) + O(p) + O(1) + 2* O(16k)
+
+Simplifying we get O(k) + O(m) + O(n) +  O((m+n)*log(m+n)) + O(p)
+
+for practical purpose we can approximate k~m~n~p.
+as in most cases  k > m > n > p
+
+therefore the time complexit become = O(m+n)* O(log(m+n)) ~ O(clogc), where c = m+n
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Task 4 
+
+"""
+Read file into texts and calls.
+It's ok if you don't understand how to read files.
+"""
+import csv
+
+with open('texts.csv', 'r') as f:
+    reader = csv.reader(f)   -> O(n)
+    texts = list(reader)        -> O(n)
+
+with open('calls.csv', 'r') as f:
+    reader = csv.reader(f)      -> O(k)
+    calls = list(reader)        -> O(k)
+
+outgoing_calls = set()  -> O(1)
+incoming_calls = set()  -> O(1)
+for record in calls :
+    outgoing_calls.add(record[0])  -> O(k)
+    incoming_calls.add(record[1])   -> O(k)
+
+
+outgoing_texts = set()  -> O(1)
+incoming_texts = set()  -> O(1)
+for record in texts:
+    outgoing_texts.add(record[0]) -> O(n)
+    incoming_texts.add(record[1])   -> O(n)
+
+
+possible_telemarketers = set()  -> O(1)
+for number in outgoing_calls :
+    if number not in incoming_calls and number not in outgoing_texts and number not in incoming_texts :   -> O(m), where m is the nummber of elements in the set outgoing_calls
+        possible_telemarketers.add(number)  -> O(p), p is the number of actual telemarketers found
+
+print("These numbers could be telemarketers: ")   -> O(1)
+for sorted_number in sorted(possible_telemarketers):
+    print(sorted_number)  -> O(p)
+
+Total time complexity = 2 * O(n) + 2 * O(k) + 2 * O(1) + 2 * (k) + 2 * O(1) + 2 * O(n) + O(m)+ O(p) O(1) + O(p)
+we can further simplofy as T = O(n) + O(k) + O(m) + O(p) = O(z), where z = n+k+m+p
